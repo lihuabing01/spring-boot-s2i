@@ -1,0 +1,53 @@
+[OSEv3:children]
+masters
+nodes
+etcd
+lb
+new_nodes
+
+[OSEv3:vars]
+openshift_deployment_type=origin
+ansible_ssh_user=root
+openshift_enable_unsupported_configurations=True
+
+openshift_ca_cert_expire_days=3650
+openshift_node_cert_expire_days=3650
+openshift_master_cert_expire_days=3650
+etcd_ca_default_days=3650
+
+openshift_enable_service_catalog=false
+template_service_broker_install=false
+ansible_service_broker_install=false
+
+debug_level=4
+openshift_clock_enabled=true
+openshift_master_cluster_method=native
+
+openshift_pkg_version=-3.10.0
+openshift_disable_check=disk_availability,docker_storage,memory_availability,docker_image_availability
+os_sdn_network_plugin_name=redhat/openshift-ovs-multitenant
+openshift_master_identity_providers=[{'name': 'htpasswd_auth','login': 'true', 'challenge': 'true','kind': 'HTPasswdPasswordIdentityProvider'}]
+
+# config for metrics
+openshift_metrics_install_metrics=true
+openshift_metrics_image_prefix=openshift/origin-
+openshift_metrics_image_version=v3.10.0
+openshift_metrics_cassandra_pvc_size=5Gi
+
+
+[masters]
+master.openshift.com
+
+[lb]
+node1.openshift.com
+
+[nodes]
+master.openshift.com openshift_schedulable=True openshift_node_group_name='node-config-all-in-one'
+node1.openshift.com openshift_node_group_name='node-config-compute' 
+
+[etcd]
+master.openshift.com
+
+[new_nodes]
+node2.openshift.com openshift_node_group_name='node-config-compute'
+node3.openshift.com openshift_node_group_name='node-config-compute'
